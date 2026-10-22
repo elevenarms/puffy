@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>puffy</title>
+<meta name="description" content="puffy: an AI agent for OpenBSD that reads the man pages so it can tell you to read the man pages.">
+<style>
+:root {
+	--bg: #ffffff;
+	--fg: #000000;
+	--red: #e00000;
+	--blue: #0000ee;
+	--visited: #551a8b;
+	--rule: #888888;
+	--box: #f4f4f4;
+}
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) {
+		--bg: #111111;
+		--fg: #e8e8e8;
+		--red: #ff5a5a;
+		--blue: #7fb2ff;
+		--visited: #c9a0ff;
+		--rule: #555555;
+		--box: #1d1d1d;
+	}
+}
+:root[data-theme="dark"] {
+	--bg: #111111;
+	--fg: #e8e8e8;
+	--red: #ff5a5a;
+	--blue: #7fb2ff;
+	--visited: #c9a0ff;
+	--rule: #555555;
+	--box: #1d1d1d;
+}
+body {
+	background: var(--bg);
+	color: var(--fg);
+	font-family: "Times New Roman", Times, serif;
+	font-size: 17px;
+	line-height: 1.4;
+	max-width: 46em;
+	margin: 0 auto;
+	padding: 1em 16px 3em;
+}
+h1, h2, h3 { color: var(--red); font-weight: bold; }
+h1 { font-size: 2.2em; margin: 0.2em 0 0; }
+h2 { font-size: 1.4em; margin-top: 1.6em; }
+a { color: var(--blue); }
+a:visited { color: var(--visited); }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 1.5em 0; }
+pre, code { font-family: "Courier New", Courier, monospace; font-size: 0.92em; }
+pre {
+	background: var(--box);
+	padding: 0.7em 0.9em;
+	overflow-x: auto;
+	white-space: pre;
+}
+pre.fish { background: none; padding: 0; color: var(--red); line-height: 1.1; }
+.center { text-align: center; }
+.slogan { font-style: italic; }
+.small { font-size: 0.85em; }
+table { border-collapse: collapse; }
+td { vertical-align: top; padding: 0.15em 0.8em 0.15em 0; }
+td:first-child { white-space: nowrap; }
+ul { padding-left: 1.4em; }
+li { margin: 0.25em 0; }
+.blink { animation: blink 1.2s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .blink { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="center">
+<pre class="fish" aria-hidden="true">
+        .  '  .
+     ' /\/\/\/\ '
+  ><(((  o    º  >      ~ glub ~
+     . \/\/\/\/ .
+        '  .  '
+</pre>
+<h1>puffy</h1>
+<p class="slogan">Only two hallucinations in the default install,
+in a heck of a long time!</p>
+<p class="small">(We are counting the ones we noticed.)</p>
+</div>
+
+<hr>
+
+<p>
+<b>puffy</b> is an AI agent for <a href="https://www.openbsd.org">OpenBSD</a>.
+It configures your system, writes your code, and
+<b>teaches you how OpenBSD works</b>, which is to say it reads
+the man pages so it can tell you which man page to read.
+</p>
+
+<p>
+OpenBSD has the finest manual pages ever written. They are complete,
+correct, terse, and searchable with <code>man -k</code>. Generations of
+users have been told to read them. Generations of users have instead
+asked on a mailing list. puffy is what happens when someone finally
+gives up and builds a robot to read them out loud.
+</p>
+
+<p>
+Yes, it is AI. We are aware. We are sorry. It asks before it touches
+anything.
+</p>
+
+<h2>Install</h2>
+
+<p>On OpenBSD 8.0/amd64, as a user who can <code>doas</code>:</p>
+
+<pre>ftp -o - https://raw.githubusercontent.com/elevenarms/puffy/main/get.sh | doas sh</pre>
+
+<p>
+Yes, that is piping a script from the internet into a root shell. It
+fetches a tarball and checks it with
+<a href="https://man.openbsd.org/signify">signify(1)</a> against our
+release key before it installs anything, which is more than most
+<code>curl | sh</code> can say. If that still makes you itch,
+<a href="https://github.com/elevenarms/puffy/blob/main/get.sh">read
+get.sh</a> first. It is about 50 lines. We would think less of you if you
+did not.
+</p>
+
+<p>Then, as your normal user:</p>
+
+<pre>$ puffy</pre>
+
+<p>The first run walks you through setup. Full instructions:
+<a href="https://github.com/elevenarms/puffy/blob/main/docs/SETUP.md">SETUP.md</a>.</p>
+
+<h2>What it looks like</h2>
+
+<pre>$ puffy enable ntpd and show me how to check it
+
+# rcctl(8) manages daemons. "enable" writes ntpd_flags to
+# /etc/rc.conf.local so ntpd starts at boot; "start" starts it now.
+# script
+doas rcctl enable ntpd
+doas rcctl start ntpd
+doas rcctl check ntpd
+# end
+Run this script? [y]es [n]o [e]xplain [q]uit: <span class="blink">_</span></pre>
+
+<p>
+Press <b>e</b> and it explains every command and flag, and which page
+of the manual says so. Press <b>n</b> and tell it why it is wrong. It
+will take it better than most people on the mailing lists.
+</p>
+
+<h2>Goals</h2>
+
+<ul>
+<li>Strive to make the AI as unnecessary as possible. Every answer comes
+with the man page it came from, so next time you can skip the AI.</li>
+<li>Prefer the base system. pf, httpd, relayd, smtpd, rcctl, doas.
+If puffy reaches for a package, it has to explain itself.</li>
+<li>Validate before reloading. <code>pfctl -nf</code> exists for a reason,
+and the reason is that you locked yourself out of an ssh session in 2009.</li>
+<li>Never run anything you did not approve. puffy asks. Every. Time.</li>
+<li>Keep working when the cloud does not. See below.</li>
+<li>Be secure by default, within reason, which for an AI agent is not
+very much reason. We did what we could.</li>
+</ul>
+
+<h2>Features</h2>
+
+<table>
+<tr><td><b>Every man page</b></td>
+<td>All 5,400+ amd64 manual pages from OpenBSD 8.0, plus the
+12,571 prebuilt packages and their pkg-readmes, indexed on your disk.
+Keyword search (SQLite FTS5) and meaning search (local embeddings,
+<a href="https://github.com/sqliteai/sqlite-vector">sqlite-vector</a>
+with 4-bit TurboQuant) work together, all on your CPU.</td></tr>
+<tr><td><b>Works offline</b></td>
+<td>No network? No API key? The cloud on fire? puffy shrugs and
+searches the man pages locally, like it is 1996 and you are on a
+14.4k modem. Type <code>retry</code> when civilization returns.</td></tr>
+<tr><td><b>Private</b></td>
+<td>Inference goes to <a href="https://trustedrouter.com">TrustedRouter</a>
+on confidential-compute hardware with end-to-end encryption and zero
+data retention. Your man page searches never leave the machine at all.</td></tr>
+<tr><td><b>pledge(2)</b></td>
+<td>puffy pledges itself after startup. We looked into pledging the
+model. There is no promise for "stop being confident."</td></tr>
+<tr><td><b>No tool calling</b></td>
+<td>The model answers in plain text, one action per reply, ending in
+<code># end</code>. puffy stops listening right there, so the model
+cannot make up the output of commands it never ran. It tried.</td></tr>
+<tr><td><b>Teaching mode</b></td>
+<td>On by default. Every task ends with what changed, how to undo it,
+and two or three man pages to read next. You will read them, right?</td></tr>
+<tr><td><b>No packages</b></td>
+<td>One tarball. Base system libraries only. The embedder runs on any
+64-bit x86 CPU. AVX not required, GPU not required, patience
+optional.</td></tr>
+</table>
+
+<h2>Frequently Asked Questions</h2>
+
+<p><b>Q: Is this AI?</b><br>
+A: Yes. Please do not tell anyone.</p>
+
+<p><b>Q: Why not just read the man page?</b><br>
+A: You should. puffy will tell you which one. It reads them too, and
+it cites them, and it is the only part of this stack that has done
+the reading.</p>
+
+<p><b>Q: Can it run as root?</b><br>
+A: It can. It will tell you not to, and suggest
+<a href="https://man.openbsd.org/doas.conf.5">doas.conf(5)</a>. That is
+the most OpenBSD thing it does.</p>
+
+<p><b>Q: Will it ever <code>rm -rf /</code>?</b><br>
+A: Not without asking you first, and you will say no, because you read
+the script. You did read the script.</p>
+
+<p><b>Q: Does it run on my VAX?</b><br>
+A: No. amd64 only. The VAX may file a complaint by mail.</p>
+
+<p><b>Q: Is this an official OpenBSD project?</b><br>
+A: No. Absolutely not. See the bottom of this page. The OpenBSD
+developers write the man pages; we just made a machine that quotes them
+back at you with unearned confidence.</p>
+
+<p><b>Q: It gave me a wrong answer.</b><br>
+A: It is AI. Check the man page it cited, then
+<a href="https://github.com/elevenarms/puffy/issues">open an issue</a>
+with the log from <code>~/.puffy/logs/</code>. Every run is logged in
+full, so we can see exactly how it got there.</p>
+
+<h2>Sources</h2>
+
+<ul>
+<li><a href="https://github.com/elevenarms/puffy">github.com/elevenarms/puffy</a>,
+ISC licensed, like a civilized project.</li>
+<li>The loop follows <a href="https://github.com/patrickjh/ssa">ssa</a>,
+a simple shell agent in one POSIX sh file.</li>
+<li>Release key: <code>RWRT3j9AugHfOIahtX9ZAjhOmAuwCTBcBwK8G6O0MQeO4HwED0EudSi8</code></li>
+</ul>
+
+<hr>
+
+<p class="small">
+puffy is an independent project. It is not affiliated with, sponsored
+by, or endorsed by the OpenBSD project, whose man pages are the real
+product here and whose developers did not ask for any of this.
+OpenBSD is a trademark of Theo de Raadt. The man page text in the
+knowledge base is the work of the OpenBSD developers and remains under
+their licenses; see
+<a href="https://github.com/elevenarms/puffy/blob/main/NOTICE">NOTICE</a>.
+</p>
+
+<p class="small center">
+<code>$ man puffy</code><br>
+<code>man: No entry for puffy in the manual.</code><br>
+(We are working on it. With AI.)
+</p>
+
+</body>
+</html>

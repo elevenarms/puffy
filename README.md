@@ -40,7 +40,7 @@ setup. Details, manual install and troubleshooting:
   doas, syspatch), validates configs before loading them, names the man
   pages behind each step, and ends with what changed, how to undo it, and
   what to read next.
-- **Knows OpenBSD 8.0.** All 6,000+ amd64 manual pages and 12,571
+- **Knows OpenBSD 8.0.** All 5,400+ amd64 manual pages and 12,571
   packages (with their pkg-readmes) are indexed on disk. The model reads
   them through `# search` and `# man:` actions, and so can you:
   `puffy --search "redirect a port with pf"`.
