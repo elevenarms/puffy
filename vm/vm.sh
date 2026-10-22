@@ -15,7 +15,7 @@ set -eu
 HERE=$(cd "$(dirname "$0")" && pwd)
 DOWNLOADS="$HERE/../build/dl"
 ISO="$HERE/puffy-install.iso"
-DISK="$HERE/openbsd80.qcow2"
+DISK="${PUFFY_VM_DISK:-$HERE/openbsd80.qcow2}"
 SSH_PORT="${PUFFY_VM_SSH_PORT:-2222}"
 HTTP_PORT="${PUFFY_VM_HTTP_PORT:-8000}"
 SETS="bsd bsd.mp bsd.rd base80.tgz comp80.tgz man80.tgz xbase80.tgz BUILDINFO INSTALL.amd64"
@@ -71,7 +71,7 @@ start_vm() {
     # shellcheck disable=SC2046
     qemu-system-x86_64 $(qemu_args | sed 's/-nographic//') \
         -display none -serial "file:$HERE/console.log" \
-        -daemonize -pidfile "$HERE/qemu.pid"
+        -daemonize -pidfile "$DISK.pid"
     echo "waiting for sshd on port $SSH_PORT"
     tries=0
     until ssh_vm true 2>/dev/null; do
@@ -88,7 +88,7 @@ window_vm() {
     # shellcheck disable=SC2046
     nohup qemu-system-x86_64 $(qemu_args | sed 's/-nographic//') \
         -display cocoa,zoom-to-fit=on -name "puffy - OpenBSD 8.0" \
-        -serial "file:$HERE/console.log" -pidfile "$HERE/qemu.pid" \
+        -serial "file:$HERE/console.log" -pidfile "$DISK.pid" \
         > "$HERE/window.log" 2>&1 &
     echo "QEMU window opening; log in as puffy (password puffy)"
 }
@@ -115,8 +115,8 @@ ssh_vm() {
 stop_vm() {
     ssh_vm halt -p || true
     sleep 10
-    [ -f "$HERE/qemu.pid" ] && kill "$(cat "$HERE/qemu.pid")" 2>/dev/null
-    rm -f "$HERE/qemu.pid"
+    [ -f "$DISK.pid" ] && kill "$(cat "$DISK.pid")" 2>/dev/null
+    rm -f "$DISK.pid"
 }
 
 case "${1:-}" in
