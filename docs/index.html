@@ -14,6 +14,7 @@
 	--visited: #551a8b;
 	--rule: #888888;
 	--box: #f4f4f4;
+	--fish: #c9a000;
 }
 @media (prefers-color-scheme: dark) {
 	:root:not([data-theme="light"]) {
@@ -24,6 +25,7 @@
 		--visited: #c9a0ff;
 		--rule: #555555;
 		--box: #1d1d1d;
+		--fish: #ffd700;
 	}
 }
 :root[data-theme="dark"] {
@@ -34,6 +36,7 @@
 	--visited: #c9a0ff;
 	--rule: #555555;
 	--box: #1d1d1d;
+	--fish: #ffd700;
 }
 body {
 	background: var(--bg);
@@ -58,7 +61,7 @@ pre {
 	overflow-x: auto;
 	white-space: pre;
 }
-pre.fish { background: none; padding: 0; color: var(--red); line-height: 1.1; }
+pre.fish { background: none; padding: 0; color: var(--fish); line-height: 1.1; font-weight: bold; }
 .center { text-align: center; }
 .slogan { font-style: italic; }
 .small { font-size: 0.85em; }
