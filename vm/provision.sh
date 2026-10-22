@@ -7,6 +7,10 @@
 
 set -eu
 
+# macOS tar adds AppleDouble ._* files for extended attributes; build
+# systems that glob *.c or *.cpp would try to compile them.
+export COPYFILE_DISABLE=1
+
 HERE=$(cd "$(dirname "$0")" && pwd)
 ROOT="$HERE/.."
 SSH="$HERE/vm.sh ssh"

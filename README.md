@@ -1,5 +1,8 @@
 # puffy
 
+*An OpenBSD native AI agent that reads the man pages so it can tell you
+which man page to read.*
+
 puffy is an OpenBSD system management, configuration, maintenance and
 programming agent that teaches as it works. It runs on your OpenBSD
 machine, plans with a TrustedRouter model on confidential compute, and
