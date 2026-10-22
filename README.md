@@ -1,3 +1,17 @@
+```
+          .   \   |   /   .
+        '. \ .-'"""""'-. / .'
+     -._  .'             '.  _.-
+        '/          .-.    \'
+   |\   |    ,     ( o )    |
+   | >==|   (       '-'     o)
+   |/   |    `              |
+       .\                   /.
+     -'  '.               .'  '-
+        .' '-._________.-' '.
+          '   /   |   \   '
+```
+
 # puffy
 
 *An OpenBSD native AI agent that reads the man pages so it can tell you
