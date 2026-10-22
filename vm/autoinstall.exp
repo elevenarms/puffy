@@ -1,0 +1,25 @@
+# autoinstall.exp PORT qemu-command...
+# Drives the OpenBSD installer on the serial console: pick (A)utoinstall,
+# point it at install.conf on the host, then wait for the first login.
+set port [lindex $argv 0]
+set timeout 3600
+log_user 1
+spawn {*}[lrange $argv 1 end]
+
+expect {
+    -re {Response file location\?.*\]} {
+        send "http://10.0.2.2:$port/install.conf\r"
+        exp_continue
+    }
+    "CONGRATULATIONS!" { exp_continue }
+    -re {\nlogin: $} {}
+    timeout { puts "\nautoinstall: timed out"; exit 1 }
+    eof { puts "\nautoinstall: qemu exited"; exit 1 }
+}
+# First boot is done (rc.firsttime ran). Power off cleanly.
+send "root\r"
+expect "Password:"
+send "puffy\r"
+expect -re {# $}
+send "halt -p\r"
+expect eof

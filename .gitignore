@@ -1,0 +1,26 @@
+# local build inputs and outputs
+/build/
+/data/
+/puffy
+/vector.so
+*.tgz
+*.tgz.sha256
+/SHA256
+/SHA256.sig
+# upstream checkout used as reference, not part of puffy
+/ssa/
+# secrets
+/trusted_router_key
+/vm/id_puffy_vm
+/vm/id_puffy_vm.pub
+/vm/install.conf
+# VM state
+/vm/*.qcow2
+/vm/*.iso
+/vm/tftp/
+/vm/*.log
+/vm/*.out
+/vm/qemu.pid
+/vm/results/
+/vm/.console.command
+__pycache__/

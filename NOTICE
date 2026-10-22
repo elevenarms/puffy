@@ -1,0 +1,37 @@
+puffy is distributed under the ISC license (see LICENSE). The release
+tarball also contains or is derived from the following works, each under
+its own license.
+
+sqlite-vector (lib/puffy/vector.so)
+    Copyright SQLite AI. Apache License 2.0.
+    https://github.com/sqliteai/sqlite-vector
+
+llama.cpp / ggml (libexec/puffy/llama-server)
+    Copyright (c) 2023-2026 The ggml authors. MIT License.
+    https://github.com/ggml-org/llama.cpp
+
+nomic-embed-text-v1.5 (share/puffy/nomic-embed-text-v1.5.Q8_0.gguf)
+    Nomic AI. Apache License 2.0.
+    https://huggingface.co/nomic-ai/nomic-embed-text-v1.5
+
+SQLite (linked into bin/puffy)
+    Public domain. https://sqlite.org
+
+go-sqlite3 (linked into bin/puffy)
+    Copyright (c) 2014 Yasuhiro Matsumoto. MIT License.
+
+golang.org/x/sys (linked into bin/puffy)
+    Copyright 2009 The Go Authors. BSD 3-Clause License.
+
+Knowledge base (share/puffy/puffy-kb.db)
+    Text rendered with mandoc(1) from the OpenBSD 8.0 manual pages (base,
+    comp, game and X11 sets) and package descriptions and pkg-readmes from
+    the OpenBSD ports tree (sqlports). These remain under their original
+    licenses: mostly ISC and BSD; Perl documentation under the terms of
+    Perl (Artistic License or GPL); X11 pages under the MIT/X11 license.
+    See the source files in the OpenBSD tree for each page's terms.
+    https://www.openbsd.org  https://cvsweb.openbsd.org
+
+ssa (design inspiration, no code included)
+    puffy follows the one-action-per-reply loop of ssa by patrickjh.
+    https://github.com/patrickjh/ssa
